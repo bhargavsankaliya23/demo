@@ -1,0 +1,243 @@
+<div class="container-fluid flex-grow-1 container-p-y position-relative">
+    <div class="position-absolute alert-popup">
+        <div class="alert alert-danger p-0" role="alert" *ngIf="isDelete">
+            <i class='bx bx-check-circle ms-2 me-3'></i> Organization Deleted Successfully.
+            <button type="button" class="btn" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="alert alert-success p-0" role="alert" *ngIf="isSaved || isUpdated">
+            <i class='bx bx-check-circle ms-2 me-3'></i> {{isSaved ? 'Organization Saved Successfully.' : isUpdated ?
+            'Organization Updated Successfully.' : ''}}
+            <button type="button" class="btn" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="text-end mb-3">
+        <button class="btn btn-primary card-radius" (click)="createOrganization()">
+            <span>
+                <i class='bx bx-menu'></i>
+            </span>
+            <span>
+                Create
+            </span>
+        </button>
+    </div>
+    <div class="card mb-3 card-radius">
+        <div class="dataTables_wrapper dt-bootstrap5 no-footer">
+            <div class="row p-3 align-items-center">
+                <div class="col-lg-4 col-md-2 col-xs-12">
+                    <h5 class="card-title mb-0"><strong>Organization List</strong></h5>
+                </div>
+                <div class="col-lg-6 col-md-2 col-xs-12">
+                    <span class="pageItem-align">
+                        <div class="w-100 d-flex align-items-center">
+                            <div class=" dataTables_length m-0" id="DataTables_Table_0_length">
+                                <label>Show &nbsp;&nbsp;
+                                    <select name="DataTables_Table_0_length" [(ngModel)]="itemsPerPage"
+                                        (change)="itemsPerPageChange($event.target.value)" class="form-select">
+                                        <option value="5">5</option>
+                                        <option value="10">10</option>
+                                        <option value="25">25</option>
+                                        <option value="50">50</option>
+                                        <option value="75">75</option>
+                                        <option value="100">100</option>
+                                    </select>
+                                </label>
+                            </div>
+                            <div class="ms-4">{{l * (p - 1) + 1}} to {{l * (p - 1) + l}} of
+                                {{organizationList?.length}}</div>
+                        </div>
+                    </span>
+                </div>
+                <div class="col-lg-2 col-md-2 col-xs-12">
+                    <div class="page-number row">
+                        <pagination-template #pagination="paginationApi" (pageChange)="p = $event">
+                            <ul class="pagination m-0">
+                                <li class="prev" [class.disabled]="pagination.isFirstPage()">
+                                    <a *ngIf="!pagination.isFirstPage()" class=" cursor-pointer"
+                                        (click)="pagination.previous()">
+                                        <i class="tf-icon bx bx-chevron-left icon-size"></i> </a>
+                                    <div *ngIf="pagination.isFirstPage()" class="">
+                                        <i class="tf-icon bx bx-chevron-left icon-size"></i>
+                                    </div>
+                                </li>
+                                <li *ngFor="let page of pagination.pages" class="page-item"
+                                    [class.active]="pagination.getCurrent() === page.value">
+                                    <a (click)="pagination.setCurrent(page.value)" class="page-link cursor-pointer"
+                                        *ngIf="pagination.getCurrent() !== page.value">
+                                        <span>{{ page.label }}</span>
+                                    </a>
+                                    <div class="page-link" *ngIf="pagination.getCurrent() === page.value">
+                                        <span>{{ page.label }}</span>
+                                    </div>
+                                </li>
+                                <li class="next" [class.disabled]="pagination.isLastPage()">
+                                    <a *ngIf="!pagination.isLastPage()" class="cursor-pointer"
+                                        (click)="pagination.next()"><i
+                                            class="tf-icon bx bx-chevron-right icon-size"></i>
+                                    </a>
+                                    <div *ngIf="pagination.isLastPage()"><i
+                                            class="tf-icon bx bx-chevron-right icon-size"></i> </div>
+                                </li>
+
+                            </ul>
+                        </pagination-template>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card table-responsive" style="border-radius: 8px;">
+        <div class="">
+            <table class="table dataTable ">
+                <thead>
+                    <tr>
+                        <th>NAME</th>
+                        <th>EMPLOYEES</th>
+                        <th>INDUSTRY</th>
+                        <th>LINE OF BUSINESS</th>
+                        <th>DATA DOMAIN</th>
+                        <th>BUSINESS FUNCTION</th>
+                        <th>REGION</th>
+                        <th>ACTIONS</th>
+                    </tr>
+                </thead>
+                <tbody class="">
+                    <tr
+                        *ngFor="let item of organizationList | paginate: { itemsPerPage: l, currentPage: p };let organizationListIndex = index">
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.employees }}</td>
+                        <td>{{ item.industry }}</td>
+                        <td>{{ item.lineOfBusiness }}</td>
+                        <td>{{ item.dataDomain }}</td>
+                        <td>{{ item.businessFunction }}</td>
+                        <td>{{ item.region }}</td>
+                        <td>
+                            <button class="btn p-0" (click)="editOrganization(organizationListIndex)">
+                                <i class='bx bx-pencil'></i>
+                            </button>
+                            <button class="btn p-0 ms-2" (click)="deleteOrganizationDetails(organizationListIndex)">
+                                <i class='bx bx-trash'></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr *ngIf="organizationList?.length == 0">
+                        <td colspan="8" class="text-center align-items-center">
+                            <h4>No Data Found</h4>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="add-organization" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header position-relative">
+                <button class="btn position-absolute clost-btn-border-radius" (click)="closeOrganizationModal()"
+                    aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 *ngIf="isEdit == false">Create New</h4>
+                <h4 *ngIf="isEdit == true">Update Organization Details</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row" [formGroup]="organizationForm">
+                    <div class="col-xl-12 col-lg-12 col-sm-12 col-xs-12">
+                        <div class="mb-3">
+                            <label class="form-label required" for="basic-default-fullname">ORGANIZATION NAME</label>
+                            <input type="text" class="form-control" formControlName="name" id="basic-default-fullname"
+                                placeholder="Organization Name" />
+                            <div *ngIf="submittedOrganization && organizationForm.controls.name.errors">
+                                <div *ngIf="organizationForm.controls.name.errors.required">
+                                    <span class="error_msg">Organization Name is Required.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-12 col-lg-12 col-sm-12 col-xs-12">
+                        <div class="mb-3">
+                            <label class="form-label required" for="basic-default-fullname">EMPLOYEES</label>
+                            <input type="text" appNumbersOnly class="form-control" formControlName="employees"
+                                id="basic-default-fullname" placeholder="Employees" />
+                            <div *ngIf="submittedOrganization && organizationForm.controls.employees.errors">
+                                <div *ngIf="organizationForm.controls.employees.errors.required">
+                                    <span class="error_msg">Employees is Required.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-12 col-lg-12 col-sm-12 col-xs-12">
+                        <div class="mb-3">
+                            <label class="form-label required" for="basic-default-fullname">INDUSTRY</label>
+                            <ng-select [items]="industryList" class="form-control p-0" bindLabel="industryList"
+                                [clearable]="false" bindValue="industryList" formControlName="industry"
+                                placeholder="Select Industry" [searchable]="false">
+                            </ng-select>
+                            <div *ngIf="submittedOrganization && organizationForm.controls.industry.errors">
+                                <div *ngIf="organizationForm.controls.industry.errors.required">
+                                    <span class="error_msg">Industry is Required.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-12 col-lg-12 col-sm-12 col-xs-12">
+                        <div class="mb-3">
+                            <label class="form-label" for="basic-default-fullname">LINE OF BUSINESS</label>
+                            <input type="text" class="form-control" formControlName="lineOfBusiness"
+                                id="basic-default-fullname" placeholder="Line of Business" />
+                        </div>
+                    </div>
+                    <div class="col-xl-12 col-lg-12 col-sm-12 col-xs-12">
+                        <div class="mb-3">
+                            <label class="form-label" for="basic-default-fullname">DATA DOMAIN</label>
+                            <input type="text" class="form-control" formControlName="dataDomain"
+                                id="basic-default-fullname" placeholder="Data Domain" />
+                        </div>
+                    </div>
+                    <div class="col-xl-12 col-lg-12 col-sm-12 col-xs-12">
+                        <div class="mb-3">
+                            <label class="form-label" for="basic-default-fullname">BUSINESS FUNCTION</label>
+                            <input type="text" class="form-control" formControlName="businessFunction"
+                                id="basic-default-fullname" placeholder="Business Function" />
+                        </div>
+                    </div>
+                    <div class="col-xl-12 col-lg-12 col-sm-12 col-xs-12">
+                        <div class="mb-3">
+                            <label class="form-label" for="basic-default-fullname">REGION</label> <br>
+                            <input name="region" class="form-check-input" formControlName="region" type="radio"
+                                value="Asia" id="REGION1">
+                            <span class="ms-3">Asia</span> <br>
+                            <input name="region" class="form-check-input" formControlName="region" type="radio"
+                                value="Australia" id="REGION2">
+                            <span class="ms-3">Australia</span> <br>
+                            <input name="region" class="form-check-input" formControlName="region" type="radio"
+                                value="Europe" id="REGION3"><span class="ms-3">Europe</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" style="float: left;">
+                <div class="w-100">
+                    <button class="btn me-2 save-btn" *ngIf="isEdit == false" (click)="saveOrganizationDetails()">
+                        Save
+                    </button>
+                    <button class="btn me-2 save-btn" *ngIf="isEdit == true" (click)="updateOrganizationDetails()">
+                        Update
+                    </button>
+                    <button class="btn cancle-btn" (click)="closeOrganizationModal()">
+                        Cancle
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

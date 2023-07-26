@@ -1,0 +1,98 @@
+.icon-size {
+    font-size: 35px;
+}
+
+.page-link {
+    border-radius: 50%;
+    line-height: 0.4;
+    text-align: center;
+    min-width: calc(1rem + 0px);
+    margin-top: 3.5px !important;
+}
+
+@media (min-width : 800px) and (max-width:2250px) {
+    .pageItem-align {
+        float: right;
+    }
+}
+
+
+
+.card-radius {
+    border-radius: 10px;
+}
+
+tr {
+    margin-top: 10px;
+}
+
+.modal-dialog {
+    position: fixed;
+    margin: auto;
+    width: 350px;
+    height: 100%;
+    right: 0px;
+}
+
+@media (min-width : 280px) and (max-width: 468px) {
+    .modal-dialog {
+        position: fixed;
+        margin: auto;
+        width: 280px;
+        height: 100%;
+        right: 0px;
+    }
+
+    .alert-popup {
+        font-size: 12px;
+    }
+
+    .pageItem-align {
+        justify-content: space-between;
+    }
+}
+
+.modal-body {
+    height: 80vh;
+    overflow-y: auto;
+}
+
+.modal-content {
+    height: 100%;
+}
+
+.clost-btn-border-radius {
+    border-radius: 50px 0px 0px 50px;
+    top: 2.5rem;
+    left: -3.14rem;
+    color: #020202;
+    background-color: #ffffff;
+    box-shadow: 0 0.125rem 0.25rem 0 rgba(133, 146, 163, 0.4);
+}
+
+.save-btn {
+    color: var(--primary-background-text-color);
+    background-color: #fd6c2a;
+    box-shadow: 0 0.125rem 0.25rem 0 var(--primary-background-shadow-color);
+}
+
+.cancle-btn {
+    color: #000;
+    background-color: #fff;
+    box-shadow: 0 0.135rem 0.35rem 0 #696cff82;
+}
+
+.swal2-popup {
+    font-size: 10px !important;
+}
+
+.mt-alerts {
+    position: fixed;
+    z-index: 999;
+}
+
+.alert-popup {
+    top: 9px;
+    right: 25px;
+    z-index: 99999;
+}
